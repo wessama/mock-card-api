@@ -59,4 +59,9 @@ services:
             $supportedPaymentTypes: '%env(SUPPORTED_PAYMENT_TYPES)%'
         tags: [ 'controller.argument_value_resolver' ]
 
+    App\Command\ProcessTransactionCommand:
+        arguments:
+            $supportedPaymentTypes: '%env(SUPPORTED_PAYMENT_TYPES)%'
+        tags: [ 'console.command' ]
+
 

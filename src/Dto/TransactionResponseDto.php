@@ -6,19 +6,19 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 class TransactionResponseDto
 {
-    #[Groups(['api_read'])]
+    #[Groups(['api_read', 'console_read'])]
     public ?string $timestamp;
 
-    #[Groups(['api_read'])]
+    #[Groups(['api_read', 'console_read'])]
     public ?string $transactionId;
 
-    #[Groups(['api_read'])]
+    #[Groups(['api_read', 'console_read'])]
     public ?string $bin;
 
-    #[Groups(['api_read'])]
+    #[Groups(['api_read', 'console_read'])]
     public ?float $amount;
 
-    #[Groups(['api_read'])]
+    #[Groups(['api_read', 'console_read'])]
     public ?string $currency;
 
     public function __construct(
