@@ -109,6 +109,9 @@ The API is documented using Swagger and can be accessed through Swagger UI.
 - **Process Transaction**: `POST /api/transaction/{type}`
 
   **Request Body:**
+    Authentication is required to access this endpoint. Use the Bearer token from the `/api/login_check` endpoint.
+    
+    SwaggerUI will allow you to authenticate using the "Authenticate" button on the top right.
 
     ```json
     {
