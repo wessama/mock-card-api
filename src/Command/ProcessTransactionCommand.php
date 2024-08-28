@@ -25,8 +25,8 @@ class ProcessTransactionCommand extends Command
 
     public function __construct(
         private readonly PaymentHandlerProvider $paymentHandlerProvider,
-        private readonly SerializerInterface    $serializer,
-        private readonly ValidatorInterface     $validator,
+        private readonly SerializerInterface $serializer,
+        private readonly ValidatorInterface $validator,
         string $supportedPaymentTypes
     ) {
         parent::__construct();
@@ -77,6 +77,7 @@ EOT
         // Validate that the type is supported
         if (!in_array(strtolower($type), $this->supportedPaymentTypes)) {
             $io->error("Unsupported payment type: {$type}");
+
             return Command::FAILURE;
         }
 
@@ -95,8 +96,9 @@ EOT
 
         if (count($errors) > 0) {
             foreach ($errors as $error) {
-                $io->error($error->getPropertyPath() . ': ' . $error->getMessage());
+                $io->error($error->getPropertyPath().': '.$error->getMessage());
             }
+
             return Command::FAILURE;
         }
 
@@ -109,9 +111,11 @@ EOT
 
             $io->success('Transaction processed successfully.');
             $io->writeln($jsonResponse);
+
             return Command::SUCCESS;
         } catch (ClientExceptionInterface $e) {
-            $io->error('Error processing transaction: ' . $e->getMessage());
+            $io->error('Error processing transaction: '.$e->getMessage());
+
             return Command::FAILURE;
         }
     }
