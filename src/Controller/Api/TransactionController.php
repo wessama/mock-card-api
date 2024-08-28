@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Dto\TransactionRequestDto;
+use App\Dto\TransactionResponseDto;
 use App\Service\PaymentHandlerProvider;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
@@ -52,7 +53,7 @@ class TransactionController extends AbstractController
             new OA\Response(
                 response: 200,
                 description: 'Successful response',
-                content: new OA\JsonContent(ref: new Model(type: TransactionRequestDto::class, groups: ['api_read']))
+                content: new OA\JsonContent(ref: new Model(type: TransactionResponseDto::class, groups: ['api_read']))
             ),
             new OA\Response(
                 response: 400,
