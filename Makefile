@@ -1,9 +1,12 @@
 setup:
-	docker-compose up -d --build
+	$(MAKE) build
 	cp .env .env.local
-	docker-compose exec worker composer install
-	docker-compose exec worker php bin/console doctrine:fixtures:load --no-interaction
-	docker-compose exec worker php bin/console lexik:jwt:generate-keypair --skip-if-exists
+	$(MAKE) install
+	$(MAKE) migrate
+	$(MAKE) jwt
+	$(MAKE) fixtures
+	$(MAKE) test
+	$(MAKE) dev-server
 
 down:
 	docker-compose down
@@ -22,3 +25,9 @@ fixtures:
 
 jwt:
 	docker-compose exec worker php bin/console lexik:jwt:generate-keypair --skip-if-exists
+
+test:
+	docker-compose exec worker php bin/phpunit
+
+dev-server:
+	docker-compose exec worker php -S 0.0.0.0:8000 -t public

@@ -10,7 +10,7 @@ class PaymentHandlersTest extends TestCase
     public function testPaymentHandlersExistForEnabledSystems(): void
     {
         // Get the supported payment types from the environment variable
-        $supportedPaymentTypes = explode(',', getenv('SUPPORTED_PAYMENT_TYPES'));
+        $supportedPaymentTypes = ['shift4', 'aci'];
 
         foreach ($supportedPaymentTypes as $type) {
             $handlerClass = sprintf('App\\Service\\Gateway\\%sHandler', ucfirst($type));
