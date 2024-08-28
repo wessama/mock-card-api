@@ -11,14 +11,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class TransactionController extends AbstractController
+class TransactionApiController extends AbstractController
 {
     public function __construct(
         private readonly PaymentHandlerProvider $paymentHandlerProvider,
-        private readonly SerializerInterface $serializer,
-        private readonly ValidatorInterface $validator
+        protected SerializerInterface $serializer,
+        protected ValidatorInterface $validator
     ) {
     }
 
@@ -40,20 +41,40 @@ class TransactionController extends AbstractController
         );
 
         // Validate DTO
-        $errors = $this->validator->validate($transactionRequest);
+        $errors = $this->validateData($transactionRequest);
 
-        if (count($errors) > 0) {
-            $errorMessages = [];
-            foreach ($errors as $error) {
-                $errorMessages[] = $error->getPropertyPath().': '.$error->getMessage();
-            }
-
-            return new JsonResponse(['errors' => $errorMessages], Response::HTTP_BAD_REQUEST);
+        if ($errors !== null) {
+            return $errors;
         }
 
         $handler = $this->paymentHandlerProvider->getHandler($type);
         $response = $handler->processTransaction($transactionData);
 
         return new JsonResponse($response);
+    }
+
+    protected function validateData($data): ?JsonResponse
+    {
+        $errors = $this->validator->validate($data);
+
+        if (count($errors) > 0) {
+            return $this->json($this->formatValidationErrors($errors), Response::HTTP_BAD_REQUEST);
+        }
+
+        return null;
+    }
+
+    private function formatValidationErrors(ConstraintViolationListInterface $errors): array
+    {
+        $formattedErrors = [];
+
+        foreach ($errors as $error) {
+            $formattedErrors[] = [
+                'field' => $error->getPropertyPath(),
+                'message' => $error->getMessage(),
+            ];
+        }
+
+        return ['errors' => $formattedErrors];
     }
 }
