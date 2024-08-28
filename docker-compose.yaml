@@ -27,13 +27,13 @@ services:
       - "${MYSQL_PORT}:3306"
 
   swagger:
-    build:
-      context: .
-      dockerfile: Dockerfiles/swagger/Dockerfile
+    image: swaggerapi/swagger-ui
     ports:
       - "${SWAGGER_PORT}:80"
     environment:
-      SWAGGER_JSON: /swagger.yaml
+        SWAGGER_JSON: /api/docs.json
+    volumes:
+        - ./public:/usr/share/nginx/html
 
 volumes:
   mysql_data:
