@@ -5,6 +5,7 @@ setup:
 	$(MAKE) migrate
 	$(MAKE) jwt
 	$(MAKE) fixtures
+	$(MAKE) test
 	$(MAKE) dev-server
 
 down:
@@ -24,6 +25,9 @@ fixtures:
 
 jwt:
 	docker-compose exec worker php bin/console lexik:jwt:generate-keypair --skip-if-exists
+
+test:
+	docker-compose exec worker php bin/phpunit
 
 dev-server:
 	docker-compose exec worker php -S 0.0.0.0:8000 -t public
