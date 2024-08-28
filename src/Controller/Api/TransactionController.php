@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class TransactionApiController extends AbstractController
+class TransactionController extends AbstractController
 {
     public function __construct(
         private readonly PaymentHandlerProvider $paymentHandlerProvider,
@@ -24,6 +24,9 @@ class TransactionApiController extends AbstractController
     }
 
     #[Route('/api/transaction/{type}', name: 'api_transaction', methods: ['POST'])]
+    /**
+     * @param array<string> $supportedPaymentTypes
+     */
     public function handleTransactionAction(Request $request, string $type, array $supportedPaymentTypes): JsonResponse
     {
         // Validate that the type is supported
@@ -59,7 +62,7 @@ class TransactionApiController extends AbstractController
         return new JsonResponse($jsonResponse, Response::HTTP_OK, [], true);
     }
 
-    protected function validateData($data): ?JsonResponse
+    protected function validateData(object $data): ?JsonResponse
     {
         $errors = $this->validator->validate($data);
 
@@ -70,6 +73,9 @@ class TransactionApiController extends AbstractController
         return null;
     }
 
+    /**
+     * @return array<string, array<int, array<string, string>>>
+     */
     private function formatValidationErrors(ConstraintViolationListInterface $errors): array
     {
         $formattedErrors = [];

@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 class SupportedPaymentTypes implements ValueResolverInterface
 {
+    /** @var string[] */
     private array $supportedPaymentTypes;
 
     public function __construct(string $supportedPaymentTypes)
@@ -20,6 +21,9 @@ class SupportedPaymentTypes implements ValueResolverInterface
         return 'supportedPaymentTypes' === $argument->getName();
     }
 
+    /**
+     * @return iterable<string[]>
+     */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         yield $this->supportedPaymentTypes;

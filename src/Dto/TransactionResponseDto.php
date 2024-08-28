@@ -16,7 +16,7 @@ class TransactionResponseDto
     public ?string $bin;
 
     #[Groups(['api_read'])]
-    public float $amount;
+    public ?float $amount;
 
     #[Groups(['api_read'])]
     public ?string $currency;

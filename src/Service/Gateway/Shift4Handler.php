@@ -5,7 +5,6 @@ namespace App\Service\Gateway;
 use App\Dto\TransactionRequestDto;
 use App\Dto\TransactionResponseDto;
 use App\Service\PaymentHandlerInterface;
-use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
@@ -55,7 +54,7 @@ class Shift4Handler implements PaymentHandlerInterface
      * @throws RedirectionExceptionInterface
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
-     * @throws Exception
+     * @throws \Exception
      */
     public function processTransaction(TransactionRequestDto $transactionData): TransactionResponseDto
     {
@@ -91,7 +90,7 @@ class Shift4Handler implements PaymentHandlerInterface
             timestamp: $data['created'] ?? null,
             transactionId: $data['id'] ?? null,
             bin: $data['card']['first6'] ?? null,
-            amount: $data['amount'] / 100 ?? 0,
+            amount: $data['amount'] / 100,
             currency: $data['currency'] ?? null
         );
     }

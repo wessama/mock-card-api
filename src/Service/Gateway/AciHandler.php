@@ -5,7 +5,6 @@ namespace App\Service\Gateway;
 use App\Dto\TransactionRequestDto;
 use App\Dto\TransactionResponseDto;
 use App\Service\PaymentHandlerInterface;
-use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
@@ -42,7 +41,7 @@ class AciHandler implements PaymentHandlerInterface
      * @throws RedirectionExceptionInterface
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
-     * @throws Exception
+     * @throws \Exception
      */
     public function processTransaction(TransactionRequestDto $transactionData): TransactionResponseDto
     {
