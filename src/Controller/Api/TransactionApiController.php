@@ -31,26 +31,32 @@ class TransactionApiController extends AbstractController
             throw new BadRequestHttpException("Unsupported payment type: {$type}");
         }
 
-        $transactionData = $request->request->all();
-
         // Deserialize JSON into DTO
         $transactionRequest = $this->serializer->deserialize(
             $request->getContent(),
             TransactionRequestDto::class,
-            'json'
+            'json',
+            ['groups' => ['api_write']]
         );
 
         // Validate DTO
         $errors = $this->validateData($transactionRequest);
 
-        if ($errors !== null) {
+        if (null !== $errors) {
             return $errors;
         }
 
         $handler = $this->paymentHandlerProvider->getHandler($type);
-        $response = $handler->processTransaction($transactionData);
+        $response = $handler->processTransaction($transactionRequest);
 
-        return new JsonResponse($response);
+        // Serialize the response DTO with the 'api_read' group
+        $jsonResponse = $this->serializer->serialize($response,
+            'json',
+            ['groups' => ['api_read']]
+        );
+
+        // Return the serialized response
+        return new JsonResponse($jsonResponse, Response::HTTP_OK, [], true);
     }
 
     protected function validateData($data): ?JsonResponse

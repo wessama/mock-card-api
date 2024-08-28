@@ -25,6 +25,16 @@ services:
             - { name: kernel.event_listener, event: kernel.exception }
 
     App\Service\Gateway\Shift4Handler:
+        arguments:
+            $apiUrl: '%env(SHIFT4_API_BASE_URL)%'
+            $apiKey: '%env(SHIFT4_API_SECRET)%'
+        calls:
+            - method: 'setCardToken'
+              arguments:
+                  - '%env(SHIFT4_CARD_TOKEN)%'
+            - method: 'setCustomerToken'
+              arguments:
+                  - '%env(SHIFT4_CUSTOMER_TOKEN)%'
         tags: [ 'app.payment_handler' ]
 
     App\Service\Gateway\AciHandler:

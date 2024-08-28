@@ -2,11 +2,13 @@
 
 namespace App\Service\Gateway;
 
+use App\Dto\TransactionRequestDto;
+use App\Dto\TransactionResponseDto;
 use App\Service\PaymentHandlerInterface;
 
 class AciHandler implements PaymentHandlerInterface
 {
-    public function processTransaction(array $transactionData): array
+    public function processTransaction(TransactionRequestDto $transactionData): TransactionResponseDto
     {
         return [
             'status' => 'success',
