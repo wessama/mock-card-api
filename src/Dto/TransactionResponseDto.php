@@ -2,9 +2,6 @@
 
 namespace App\Dto;
 
-use DateTime;
-use DateTimeInterface;
-use Exception;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 class TransactionResponseDto
@@ -43,15 +40,15 @@ class TransactionResponseDto
         try {
             if (is_numeric($timestamp)) {
                 // If the timestamp is numeric, assume it's a Unix timestamp
-                $dateTime = (new DateTime())->setTimestamp((int)$timestamp);
+                $dateTime = (new \DateTime())->setTimestamp((int) $timestamp);
             } else {
                 // Try to parse other formats (ISO 8601, etc.)
-                $dateTime = new DateTime($timestamp);
+                $dateTime = new \DateTime($timestamp);
             }
 
             // Return the unified format (e.g., ISO 8601)
-            return $dateTime->format(DateTimeInterface::ATOM);
-        } catch (Exception $e) {
+            return $dateTime->format(\DateTimeInterface::ATOM);
+        } catch (\Exception $e) {
             // Handle parsing error, return null or a default value if needed
             return null;
         }

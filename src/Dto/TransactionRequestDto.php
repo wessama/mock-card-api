@@ -41,8 +41,7 @@ class TransactionRequestDto
     public string $cardExpMonth;
 
     #[Assert\NotNull(message: 'Card expiration year is required.')]
-    #[Assert\Length(min: 2, max: 2)]
-    #[Assert\Range(min: 21, max: 99)]
+    #[Assert\Length(min: 4, max: 4)]
     #[SerializedName('card_exp_year')]
     #[Groups(['api_write'])]
     public string $cardExpYear;
@@ -50,5 +49,6 @@ class TransactionRequestDto
     #[Assert\NotNull(message: 'Card CVV is required.')]
     #[Assert\Length(min: 3, max: 4)]
     #[SerializedName('card_cvv')]
+    #[Groups(['api_write'])]
     public string $cardCvv;
 }

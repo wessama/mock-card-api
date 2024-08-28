@@ -38,6 +38,15 @@ services:
         tags: [ 'app.payment_handler' ]
 
     App\Service\Gateway\AciHandler:
+        arguments:
+            $apiUrl: '%env(ACI_API_URL)%'
+        calls:
+            - method: 'setEntityId'
+              arguments:
+                  - '%env(ACI_ENTITY_ID)%'
+            - method: 'setAuthToken'
+              arguments:
+                  - '%env(ACI_AUTH_TOKEN)%'
         tags: [ 'app.payment_handler' ]
 
     # Autowire all services tagged with `app.payment_handler`

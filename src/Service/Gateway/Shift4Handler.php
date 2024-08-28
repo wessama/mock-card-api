@@ -5,6 +5,8 @@ namespace App\Service\Gateway;
 use App\Dto\TransactionRequestDto;
 use App\Dto\TransactionResponseDto;
 use App\Service\PaymentHandlerInterface;
+use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -21,6 +23,7 @@ class Shift4Handler implements PaymentHandlerInterface
         protected string $apiUrl,
         protected string $apiKey,
         private readonly HttpClientInterface $httpClient,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -52,7 +55,7 @@ class Shift4Handler implements PaymentHandlerInterface
      * @throws RedirectionExceptionInterface
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
-     * @throws \Exception
+     * @throws Exception
      */
     public function processTransaction(TransactionRequestDto $transactionData): TransactionResponseDto
     {
@@ -65,13 +68,24 @@ class Shift4Handler implements PaymentHandlerInterface
             'description' => 'Example charge',
         ];
 
-        // Make the HTTP request
-        $response = $this->httpClient->request('POST', "{$this->apiUrl}/charges", [
-            'auth_basic' => [$this->apiKey, ''], // Basic Auth with an empty password
-            'body' => $data,
-        ]);
+        try {
+            // Make the HTTP request
+            $response = $this->httpClient->request('POST', "{$this->apiUrl}/charges", [
+                'auth_basic' => [$this->apiKey, ''], // Basic Auth with an empty password
+                'body' => $data,
+            ]);
 
-        $data = $response->toArray();
+            $data = $response->toArray();
+        } catch (ClientExceptionInterface $e) {
+            $errorContent = $e->getResponse()->getContent(false);
+
+            $this->logger->error('Error processing transaction', [
+                'status_code' => $e->getCode(),
+                'error' => $errorContent,
+            ]);
+
+            throw $e;
+        }
 
         return new TransactionResponseDto(
             timestamp: $data['created'] ?? null,
