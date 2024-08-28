@@ -20,15 +20,24 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
     App\Service\Gateway\Shift4Handler:
-        tags: ['app.payment_handler']
+        tags: [ 'app.payment_handler' ]
 
     App\Service\Gateway\AciHandler:
-        tags: ['app.payment_handler']
+        tags: [ 'app.payment_handler' ]
 
     # Autowire all services tagged with `app.payment_handler`
     App\Service\PaymentHandlerProvider:
         arguments:
             $handlers: !tagged_iterator 'app.payment_handler'
+
+    App\ArgumentResolver\SupportedPaymentTypes:
+        arguments:
+            $supportedPaymentTypes: '%env(SUPPORTED_PAYMENT_TYPES)%'
+        tags: [ 'controller.argument_value_resolver' ]
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 class PaymentHandlerProvider
@@ -20,6 +21,6 @@ class PaymentHandlerProvider
             }
         }
 
-        throw new \InvalidArgumentException("No handler found for type: {$type}");
+        throw new InvalidArgumentException("No handler found for type: {$type}");
     }
 }
