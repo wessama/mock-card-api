@@ -17,7 +17,8 @@ final class UserFactory extends PersistentProxyObjectFactory
      * @todo inject services if required
      */
     public function __construct(
-        private readonly UserPasswordHasherInterface $hasher) {
+        private readonly UserPasswordHasherInterface $hasher)
+    {
     }
 
     public static function class(): string
@@ -44,7 +45,7 @@ final class UserFactory extends PersistentProxyObjectFactory
      */
     protected function initialize(): static
     {
-        return $this->afterInstantiate(function(User $user): void {
+        return $this->afterInstantiate(function (User $user): void {
             $user->setPassword(
                 $this->hasher->hashPassword($user, $user->getPassword())
             );
