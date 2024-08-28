@@ -70,8 +70,10 @@
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.6",
         "friendsofphp/php-cs-fixer": "^3.63",
         "phpstan/phpstan": "^1.12",
-        "symfony/maker-bundle": "^1.60"
+        "symfony/maker-bundle": "^1.60",
+        "zenstruck/foundry": "^2.0"
     }
 }
