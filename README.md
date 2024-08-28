@@ -131,13 +131,13 @@ The application includes a custom command for processing a transaction.
 For help with the command, run:
 
 ```bash
-docker-compose exec worker php bin/console process-transaction --help
+docker-compose exec worker php bin/console process:transaction --help
 ```
 
 ### Example
 
 ```bash
-docker-compose exec worker php bin/console process-transaction shift4 \
+docker-compose exec worker php bin/console process:transaction shift4 \
     --amount=92.00 \
     --currency=EUR \
     --card-number=4200000000000000 \
