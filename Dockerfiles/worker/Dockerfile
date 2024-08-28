@@ -16,8 +16,8 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Configure Nginx
-COPY default.conf /etc/nginx/conf.d/default.conf
+# Configure nginx
+COPY Dockerfiles/worker/default.conf /etc/nginx/conf.d/default.conf
 
 WORKDIR /var/www/html
 

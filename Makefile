@@ -1,9 +1,10 @@
 setup:
-	docker-compose up -d --build
+	$(MAKE) build
 	cp .env .env.local
-	docker-compose exec worker composer install
-	docker-compose exec worker php bin/console doctrine:fixtures:load --no-interaction
-	docker-compose exec worker php bin/console lexik:jwt:generate-keypair --skip-if-exists
+	$(MAKE) install
+	$(MAKE) migrate
+	$(MAKE) jwt
+	$(MAKE) fixtures
 
 down:
 	docker-compose down
