@@ -105,6 +105,13 @@ The API is documented using Swagger and can be accessed through Swagger UI.
         "password": "password"
     }
     ```
+  Alternatively, run the following curl command:
+
+    ```bash
+  curl --location --request GET 'http://127.0.0.1:8081/api/login_check' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{"username":"example@metricalo.com","password":"password"}'
+    ```
 
 - **Process Transaction**: `POST /api/transaction/{type}`
 
