@@ -27,7 +27,7 @@ fixtures:
 jwt:
 	docker-compose exec worker php bin/console lexik:jwt:generate-keypair --skip-if-exists
 
-analyze:
+analyse:
 	docker-compose exec worker composer analyse
 
 test:
