@@ -17,7 +17,7 @@ class SupportedPaymentTypes implements ValueResolverInterface
 
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
-        return $argument->getName() === 'supportedPaymentTypes';
+        return 'supportedPaymentTypes' === $argument->getName();
     }
 
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
